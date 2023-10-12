@@ -1,32 +1,31 @@
-package com.example.client_server_multithread;
+package com.example.messenger_client;
 
 import javafx.scene.layout.VBox;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
-    private ServerSocket serverSocket;
+public class Client {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
 
-    public Server(ServerSocket serverSocket) {
+    public Client(Socket socket) {
         try {
-            this.serverSocket = serverSocket;
-            this.socket = serverSocket.accept();
+            this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
-            System.out.println("Error when creating server");
+            System.out.println("Error when creating client");
             e.printStackTrace();
+            closeEverything(socket, bufferedReader, bufferedWriter);
+
         }
     }
 
-    public void sendMessageToClient(String messageToClient) {
+    public void sendMessageToServer(String messageToServer) {
         try {
-            bufferedWriter.write(messageToClient);
+            bufferedWriter.write(messageToServer);
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch(IOException e) {
@@ -36,7 +35,7 @@ public class Server {
         }
     }
 
-    public void receiveMessageFromClient(VBox vBox) {
+    public void receiveMessageFromServer(VBox vBox) {
         new Thread(new Runnable() {
             @Override
             public void run() {
