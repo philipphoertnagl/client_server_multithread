@@ -1,5 +1,6 @@
 package com.example.client_server_multithread;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -60,7 +61,7 @@ public class Controller implements Initializable {
                 if (!messageToSend.isEmpty()) {
                     HBox hBox = new HBox();
                     hBox.setAlignment(Pos.CENTER_RIGHT);
-                    hBox.setPadding(new Insets(5,5,5, 10));
+                    hBox.setPadding(new Insets(5, 5, 5, 10));
 
                     Text text = new Text(messageToSend);
                     TextFlow textFlow = new TextFlow(text);
@@ -80,8 +81,26 @@ public class Controller implements Initializable {
             }
 
         });
-        public static void addLabel(String messageFromClient, Vbox vBox) {
 
-        }
+
+    public static void addLabel(String messageFromClient, VBox vbox) {
+        Hbox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.setPadding(new Insets(5, 5, 5, 10));
+
+        Text text = new Text(messageFromClient);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setStyle("-fx-background-color rgb(15,125,242)" +
+                "fx- background-radius: 20px");
+        textFlow.setPadding(new Insets(5, 10, 5, 10));
+        hBox.getChildren().add(textFlow);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    vbox.getChildren().add(hBox);
+                }
+            });
     }
 }
+
